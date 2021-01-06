@@ -1,25 +1,25 @@
 import { GetServerSideProps, NextPage } from "next";
-import Card from "../../components/Card";
+import { Band } from "./styles";
+import Card from "../../src/components/Card";
+
+import { PostDTO } from "../../src/dtos/PostDTO";
 
 interface Props {
-  posts: {
-    id: number;
-    title: string;
-    description: string;
-  }[];
+  posts: PostDTO[];
 }
 
 const Blog: NextPage<Props> = ({ posts }) => (
-  <main>
+  <Band>
     {posts.map((post) => (
       <Card key={post.id} post={post} />
     ))}
-  </main>
+  </Band>
 );
 export default Blog;
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const response = await fetch("http://localhost:1337/posts");
+  const { API_URL } = process.env;
+  const response = await fetch(`${API_URL}/posts`);
   const data = await response.json();
   return {
     props: {
